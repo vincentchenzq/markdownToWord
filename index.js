@@ -4,15 +4,18 @@ const ejs = require("ejs");
 const marked = require("marked");
 const templatePath = "./template";
 const targetPath = "./output";
-const targetName = 'welcome.md'
+const targetName = "welcome.md";
 const html2Docx = require("html-docx-js");
 const cheerio = require("cheerio");
 (async () => {
   try {
-    const tempResult = await renderFile(path.resolve(templatePath,targetName), {
-      admin: true,
-      userName: 'vincent'
-  });
+    const tempResult = await renderFile(
+      path.resolve(templatePath, targetName),
+      {
+        admin: true,
+        userName: "vincent",
+      }
+    );
     // 生成markdown
     renderOutput(path.resolve(targetPath, "begin.md"), tempResult);
     // 输出word
@@ -70,12 +73,19 @@ function renderMarkdownToWord(markdownPath, outputPath) {
         return;
       }
       const result = getHtml(marked(file));
-      renderOutput(outputPath, html2Docx.asBlob(result));
+      const $ = cheerio.load(result);
+      $("img").each((index, img) => {
+        $(img).attr(
+          "src",
+          renderImgToBase64(path.resolve(targetPath, $(img).attr("src")))
+        );
+      });
+      renderOutput(outputPath, html2Docx.asBlob($.html()));
     });
   });
 }
 /**
- * 
+ *
  * @param {*} template 渲染内容
  */
 function getHtml(template) {
