@@ -17,7 +17,7 @@ const cheerio = require("cheerio");
       }
     );
     // 生成markdown
-    renderOutput(path.resolve(targetPath, "begin.md"), tempResult);
+    await renderOutput(path.resolve(targetPath, targetName), tempResult);
     // 输出word
     renderMarkdownToWord(
       path.resolve(targetPath, targetName),
@@ -95,26 +95,9 @@ function getHtml(template) {
     <head>
         <meta charset="UTF-8">
         <title></title>
-        <style>
-            .markdown-body {
-                box-sizing: border-box;
-                min-width: 200px;
-                max-width: 980px;
-                margin: 0 auto;
-                padding: 45px;
-            }
-            @media (max-width: 767px) {
-                .markdown-body {
-                    padding: 15px;
-                }
-            }
-            {{{style}}}
-        </style>
     </head>
     <body>
-        <div class="markdown-body">
-            ${template}
-        </div>
+      ${template}
     </body>
     </html>
 `;
