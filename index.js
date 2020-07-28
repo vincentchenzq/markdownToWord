@@ -7,14 +7,11 @@ const targetPath = "./output";
 const targetName = "welcome.md";
 const html2Docx = require("html-docx-js");
 const cheerio = require("cheerio");
-(async () => {
+module.exports = async function run (options) {
   try {
     const tempResult = await renderFile(
       path.resolve(templatePath, targetName),
-      {
-        admin: true,
-        userName: "vincent",
-      }
+      options
     );
     // 生成markdown
     await renderOutput(path.resolve(targetPath, targetName), tempResult);
@@ -26,7 +23,7 @@ const cheerio = require("cheerio");
   } catch (error) {
     console.error(error);
   }
-})();
+}
 
 /**
  * @description 替换模板文件中的变量
